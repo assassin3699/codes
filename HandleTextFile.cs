@@ -23,7 +23,7 @@ public class HandleTextFile : MonoBehaviour
         questions = new List<Question>();
         dataScriptable = quizDataList[0];
         questions.AddRange(dataScriptable.questions);
-        ReadString();
+        WriteString();
         
     }
     void WriteString()
@@ -32,7 +32,7 @@ public class HandleTextFile : MonoBehaviour
 
         //Write some text to the test.txt file
         StreamWriter writer = new StreamWriter(path, true);
-        for(int i = 0; i < 60; i++){
+        for(int i = 0; i < 80; i++){
             selectedQuetion = questions[i];
             writer.Write("Question"+(i+1)+ " = " + selectedQuetion.questionInfo + "\n");
             writer.Write("Option1 = " + selectedQuetion.options[0] + "\n");
@@ -60,8 +60,33 @@ public class HandleTextFile : MonoBehaviour
         //Read the text from directly from the test.txt file
         StreamReader reader = new StreamReader(path); 
         text = reader.ReadToEnd();
-        Debug.Log(text);
         lines = text.Split('\n');
+        Debug.Log(text);
+
+
+        int j = 0;
+        for(int i = 60; i < 80; i++){
+            questions[i].questionInfo = lines[j];
+            questions[i].options[0] = lines[j+1];
+            questions[i].options[1]= lines[j+2];
+            questions[i].options[2] = lines[j+3];
+            questions[i].options[3] = lines[j+4];
+            if( lines[j+6] == "Answer: A"){
+                questions[i].correctAns = lines[j+1];
+            }
+            else if( lines[j+6] == "Answer: B"){
+                questions[i].correctAns = lines[j+2];
+            }
+            else if( lines[j+6] == "Answer: C"){
+                questions[i].correctAns = lines[j+3];
+            }
+            else if( lines[j+6] == "Answer: D"){
+                questions[i].correctAns = lines[j+4];
+            }
+            j =  j + 8;
+            
+        }
+        
         reader.Close();
     }
 
